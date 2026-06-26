@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>首尔 Solo Trip</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部标题 -->
+        <header class="header">
+            <div class="header-top">
+                <button id="btn-reset" class="btn-text" title="重置">↺</button>
+                <div class="header-center">
+                    <h1>Seoul Trip</h1>
+                    <p>2026.07.09 – 07.15</p>
+                </div>
+                <button id="btn-edit" class="btn-edit">编辑</button>
+            </div>
+        </header>
+
+        <!-- 行程卡片由 JS 动态渲染 -->
+
+        <!-- 底部应急信息 -->
+        <footer class="footer">
+            <p>民宿地址：首尔中区东大门历史文化公园站附近</p>
+            <p>地铁运营：约 05:30 – 24:00（各线路略有差异）</p>
+            <p>应急电话：112（报警）/ 1330（旅游热线）</p>
+        </footer>
+    </div>
+
+    <!-- 编辑弹窗 -->
+    <div id="modal" class="modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span id="modal-title">编辑行程</span>
+                <button id="modal-close" class="btn-icon">✕</button>
+            </div>
+            <form id="modal-form">
+                <label>时间</label>
+                <input name="time" type="text" placeholder="如 14:00">
+
+                <label>地点 <span class="required">*</span></label>
+                <input name="place" type="text" placeholder="店名 / 景点名" required>
+
+                <label>交通</label>
+                <input name="traffic" type="text" placeholder="如 步行5分钟、地铁2号线">
+
+                <label>备注</label>
+                <input name="note" type="text" placeholder="吃什么、买什么、注意什么">
+
+                <button type="submit" class="btn-save">保存</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 图片灯箱 -->
+    <div id="lightbox" class="lightbox">
+        <button id="lightbox-close" class="lightbox-close">✕</button>
+        <button id="lightbox-prev" class="lightbox-nav">‹</button>
+        <img id="lightbox-img" src="" alt="">
+        <button id="lightbox-next" class="lightbox-nav">›</button>
+        <span id="lightbox-counter"></span>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+    </script>
+</body>
+</html>

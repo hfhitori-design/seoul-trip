@@ -1,0 +1,11 @@
+# 首尔 Solo Trip
+
+# Python
+__pycache__/
+
+# System
+Thumbs.db
+.DS_Store
+
+# Temp
+*.tmp
