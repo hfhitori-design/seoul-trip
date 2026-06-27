@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>首尔 Solo Trip</title>
+    <title>Seoul Trip</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,20 +13,104 @@
             <div class="header-top">
                 <button id="btn-reset" class="btn-text" title="重置">↺</button>
                 <div class="header-center">
-                    <h1>Seoul Trip</h1>
-                    <p>2026.07.09 – 07.15</p>
+                    <h1><span class="hand">Seoul Trip</span></h1>
+                    <p class="date-sub">2026.07.09 — 07.15</p>
                 </div>
                 <button id="btn-edit" class="btn-edit">编辑</button>
             </div>
+            <!-- 状态栏 -->
+            <div id="status-bar" class="status-bar">
+                <div id="budget-row" class="status-row" style="display:none">
+                    <span class="status-budget">
+                        💰 总预算 <span id="budget-total-label"></span>
+                        <div class="budget-bar-wrap"><div id="budget-bar" class="budget-bar-fill" style="width:0%"></div></div>
+                        <span id="budget-detail" style="font-size:12px;color:var(--text-muted)"></span>
+                    </span>
+                </div>
+                <div id="checkin-row" class="status-row" style="display:none">
+                    <span class="status-checkin"><span class="checkin-dot">✓</span> <span id="checkin-count"></span></span>
+                </div>
+            </div>
+            <div style="text-align:center;padding-top:4px">
+                <button id="btn-budget-set" class="btn-text" style="font-size:13px;width:auto;color:var(--text-muted);font-family:var(--font-hand);letter-spacing:1px">设定预算</button>
+            </div>
         </header>
 
-        <!-- 行程卡片由 JS 动态渲染 -->
+        <!-- Tab 导航栏 -->
+        <nav class="tab-bar">
+            <button class="tab-btn active" data-tab="trip">🏠 行程</button>
+            <button class="tab-btn" data-tab="checklist">📋 准备</button>
+            <button class="tab-btn" data-tab="pool">📍 地点</button>
+            <button class="tab-btn" data-tab="summary">💰 花销</button>
+            <button class="tab-btn" data-tab="phrases">🗣️ 韩语</button>
+        </nav>
+
+        <!-- Tab 面板：行程（默认显示）-->
+        <div id="tab-trip" class="tab-panel active">
+            <!-- 天气组件 -->
+            <div id="weather-widget" class="weather-widget">
+                <div class="weather-inner">
+                    <span id="weather-icon" class="weather-icon">☀️</span>
+                    <div class="weather-info">
+                        <span id="weather-temp" class="weather-temp">--°</span>
+                        <span id="weather-desc" class="weather-desc">加载中...</span>
+                    </div>
+                    <div id="weather-rain" class="weather-rain" style="display:none">
+                        🌧️ <span id="weather-rain-pct"></span>
+                    </div>
+                </div>
+                <div id="weather-updated" class="weather-updated"></div>
+            </div>
+
+            <!-- 行程卡片由 JS 动态渲染 -->
+            <div id="days-container"></div>
+        </div>
+
+        <!-- Tab 面板：行前准备 -->
+        <div id="tab-checklist" class="tab-panel">
+            <div id="checklist-content"></div>
+        </div>
+
+        <!-- Tab 面板：地点备选库 -->
+        <div id="tab-pool" class="tab-panel">
+            <div class="pool-search">
+                <input id="pool-search-input" type="text" placeholder="搜索地点名、区域...">
+                <button id="btn-random-pick" class="btn-random" title="随机抽一个！">🎲 抽一个</button>
+                <button id="btn-add-loc" class="btn-random" style="border-style:solid" title="添加新地点">+ 新增</button>
+            </div>
+            <div id="add-loc-form" class="add-loc-form" style="display:none">
+                <input id="add-loc-name" type="text" placeholder="地点名称 *" class="add-loc-input">
+                <div class="add-loc-row">
+                    <input id="add-loc-neighborhood" type="text" placeholder="区域（如 延禧洞）" class="add-loc-input half">
+                    <input id="add-loc-category" type="text" placeholder="分类（如 咖啡/甜品）" class="add-loc-input half">
+                </div>
+                <input id="add-loc-note" type="text" placeholder="备注（特色、营业时间...）" class="add-loc-input">
+                <input id="add-loc-budget" type="text" placeholder="预算（如 ₩8,000-15,000）" class="add-loc-input">
+                <div class="add-loc-actions">
+                    <button id="btn-add-loc-save" class="btn-expense-save">保存</button>
+                    <button id="btn-add-loc-cancel" class="btn-expense-cancel">取消</button>
+                </div>
+            </div>
+            <div id="random-result" class="random-result" style="display:none"></div>
+            <div id="pool-filters" class="pool-filters"></div>
+            <div id="pool-list"></div>
+        </div>
+
+        <!-- Tab 面板：花销总结 -->
+        <div id="tab-summary" class="tab-panel">
+            <div id="summary-content" class="expense-summary"></div>
+        </div>
+
+        <!-- Tab 面板：实用韩语 -->
+        <div id="tab-phrases" class="tab-panel">
+            <div id="phrases-content"></div>
+        </div>
 
         <!-- 底部应急信息 -->
         <footer class="footer">
-            <p>民宿地址：首尔中区东大门历史文化公园站附近</p>
-            <p>地铁运营：约 05:30 – 24:00（各线路略有差异）</p>
-            <p>应急电话：112（报警）/ 1330（旅游热线）</p>
+            <p>🏠 民宿：首尔中区东大门历史文化公园站附近</p>
+            <p>🚇 地铁运营：约 5:30 — 24:00</p>
+            <p>📞 112（报警）· 1330（旅游热线）</p>
         </footer>
     </div>
 
@@ -34,23 +118,43 @@
     <div id="modal" class="modal">
         <div class="modal-box">
             <div class="modal-header">
-                <span id="modal-title">编辑行程</span>
+                <span id="modal-title" class="hand">编辑行程</span>
                 <button id="modal-close" class="btn-icon">✕</button>
             </div>
             <form id="modal-form">
-                <label>时间</label>
+                <label>⏰ 时间</label>
                 <input name="time" type="text" placeholder="如 14:00">
 
-                <label>地点 <span class="required">*</span></label>
+                <label>📍 地点 <span class="required">*</span></label>
                 <input name="place" type="text" placeholder="店名 / 景点名" required>
 
-                <label>交通</label>
+                <label>🚃 交通</label>
                 <input name="traffic" type="text" placeholder="如 步行5分钟、地铁2号线">
 
-                <label>备注</label>
+                <label>📝 备注</label>
                 <input name="note" type="text" placeholder="吃什么、买什么、注意什么">
 
                 <button type="submit" class="btn-save">保存</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 预算设置弹窗 -->
+    <div id="budget-modal" class="modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span class="hand">💰 设定预算</span>
+                <button id="budget-modal-close" class="btn-icon">✕</button>
+            </div>
+            <form id="budget-form">
+                <label>总预算（₩ 韩元）</label>
+                <input name="totalBudget" type="number" placeholder="如 1200000" inputmode="numeric">
+
+                <label>汇率（1 RMB = ? KRW）</label>
+                <input name="rmbRate" type="number" placeholder="默认 185" inputmode="numeric">
+
+                <p class="budget-hint" style="margin-top:8px">当前：₩1,000 ≈ ¥5.4（汇率 185）</p>
+                <button type="submit" class="btn-save">保存预算</button>
             </form>
         </div>
     </div>
@@ -64,10 +168,13 @@
         <span id="lightbox-counter"></span>
     </div>
 
+    <!-- 离线提示 -->
+    <div id="offline-toast" class="offline-toast">📡 离线模式</div>
+
     <script src="script.js"></script>
     <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js');
+        navigator.serviceWorker.register('sw.js').catch(() => {});
     }
     </script>
 </body>
