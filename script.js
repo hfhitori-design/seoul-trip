@@ -467,9 +467,10 @@ function submitModal(e) {
   }
 
   if (editItemIdx !== null) {
-    // 编辑已有 — 保留 imageIds
+    // 编辑已有 — 保留 imageIds 和 expenses
     const existing = tripData.days[editDayIdx].items[editItemIdx];
     item.imageIds = existing.imageIds || [];
+    item.expenses = existing.expenses || [];
     tripData.days[editDayIdx].items[editItemIdx] = item;
   } else {
     // 新增
