@@ -376,7 +376,6 @@ function render() {
   });
 
   renderDays();
-  renderBudgetBar();
   renderCheckinStats();
   renderChecklist();
   renderLocationPool();
@@ -637,29 +636,6 @@ function renderDays() {
     addDayArea.appendChild(addDayBtn);
     container.appendChild(addDayArea);
   }
-}
-
-// ===== 预算条 =====
-function renderBudgetBar() {
-  const row = document.getElementById('budget-row');
-  const total = tripData.settings.totalBudget || 0;
-  if (total <= 0) {
-    row.style.display = 'none';
-    return;
-  }
-  row.style.display = 'flex';
-  const spent = calcTripTotal();
-  const pct = Math.min(100, Math.round((spent / total) * 100));
-  const over = spent > total;
-  const rate = tripData.settings.rmbRate || 185;
-
-  document.getElementById('budget-total-label').textContent = formatKRW(total);
-  const bar = document.getElementById('budget-bar');
-  bar.style.width = pct + '%';
-  bar.className = 'budget-bar-fill' + (over ? ' over' : '');
-  document.getElementById('budget-detail').textContent =
-    '已花 ' + formatKRW(spent) + ' ≈ ¥' + Math.round(spent / rate) +
-    (over ? ' 🔴 超支 ' + formatKRW(spent - total) : ' · 剩余 ' + formatKRW(total - spent));
 }
 
 // ===== 打卡统计 =====
@@ -1595,28 +1571,6 @@ async function updateWeather() {
   widget.classList.remove('loading');
 }
 
-// ===== 预算设置弹窗 =====
-function openBudgetModal() {
-  const modal = document.getElementById('budget-modal');
-  const form = document.getElementById('budget-form');
-  form.totalBudget.value = tripData.settings.totalBudget || '';
-  form.rmbRate.value = tripData.settings.rmbRate || 185;
-  modal.classList.add('active');
-}
-
-function closeBudgetModal() {
-  document.getElementById('budget-modal').classList.remove('active');
-}
-
-function submitBudget(e) {
-  e.preventDefault();
-  const form = document.getElementById('budget-form');
-  tripData.settings.totalBudget = Number(form.totalBudget.value) || 0;
-  tripData.settings.rmbRate = Number(form.rmbRate.value) || 185;
-  closeBudgetModal();
-  saveData();
-}
-
 // ===== Tab 切换 =====
 function setupTabs() {
   const btns = document.querySelectorAll('.tab-btn');
@@ -1665,14 +1619,6 @@ async function init() {
   document.getElementById('modal-form').addEventListener('submit', submitModal);
   document.getElementById('modal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
-  });
-
-  // 预算弹窗
-  document.getElementById('btn-budget-set').addEventListener('click', openBudgetModal);
-  document.getElementById('budget-modal-close').addEventListener('click', closeBudgetModal);
-  document.getElementById('budget-form').addEventListener('submit', submitBudget);
-  document.getElementById('budget-modal').addEventListener('click', function(e) {
-    if (e.target === this) closeBudgetModal();
   });
 
   // 地点库搜索 + 随机抽选 + 添加地点
