@@ -702,22 +702,9 @@ function renderLocationPool() {
   const filterWrap = document.createElement('div');
   filterWrap.className = 'filter-collapse';
 
-  // 折叠头
-  const header = document.createElement('div');
-  header.className = 'filter-header';
-  header.innerHTML = '<span class="filter-header-label">📍 区域</span>' +
-    '<span class="filter-header-val">' + (poolFilterArea || '全部') + '</span>' +
-    '<span class="filter-arrow">▾</span>';
-  header.addEventListener('click', () => {
-    const body = filterWrap.querySelector('.filter-body');
-    const arrow = header.querySelector('.filter-arrow');
-    const isOpen = body.classList.toggle('open');
-    arrow.textContent = isOpen ? '▴' : '▾';
-  });
-
-  // 折叠体
-  const body = document.createElement('div');
-  body.className = 'filter-body';
+  // 芯片行
+  const chipRow = document.createElement('div');
+  chipRow.className = 'filter-chip-row';
   areas.forEach(a => {
     const chip = document.createElement('button');
     chip.className = 'filter-chip' + (poolFilterArea === a ? ' active' : '');
@@ -726,11 +713,21 @@ function renderLocationPool() {
       poolFilterArea = poolFilterArea === a ? '' : a;
       renderLocationPool();
     });
-    body.appendChild(chip);
+    chipRow.appendChild(chip);
   });
 
-  filterWrap.appendChild(header);
-  filterWrap.appendChild(body);
+  // 展开/收起箭头
+  const arrow = document.createElement('span');
+  arrow.className = 'filter-arrow';
+  arrow.textContent = '▾';
+  arrow.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = chipRow.classList.toggle('open');
+    arrow.textContent = isOpen ? '▴' : '▾';
+  });
+
+  filterWrap.appendChild(chipRow);
+  filterWrap.appendChild(arrow);
   filtersEl.appendChild(filterWrap);
 
   // 筛选
