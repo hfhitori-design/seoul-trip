@@ -621,7 +621,7 @@ body {
     outline: none;
 }
 .pool-search input:focus { border-color: var(--green); }
-.pool-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.pool-filters { margin-bottom: 10px; }
 .filter-chip {
     padding: 5px 12px; font-size: 12px;
     border: 1.5px solid var(--divider); border-radius: var(--radius-xl);
@@ -630,6 +630,55 @@ body {
 }
 .filter-chip.active {
     background: var(--green-light); border-color: var(--green); color: var(--green);
+}
+
+/* 可折叠区域筛选 */
+.filter-collapse {
+    background: var(--white);
+    border: 1px solid var(--divider);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+.filter-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+}
+.filter-header:active { background: var(--bg-page); }
+.filter-header-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+.filter-header-val {
+    font-size: 13px;
+    color: var(--text-main);
+    font-weight: 400;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.filter-arrow {
+    font-size: 12px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: transform 0.2s;
+}
+.filter-body {
+    display: none;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 14px 12px;
+    border-top: 1px solid var(--divider);
+    padding-top: 10px;
+}
+.filter-body.open {
+    display: flex;
 }
 
 /* 地点卡片 */

@@ -697,8 +697,27 @@ function renderLocationPool() {
   const areas = [...new Set(locationPool.map(l => l.neighborhood).filter(Boolean))];
   const tags = [...new Set(locationPool.flatMap(l => l.tags || []))];
 
-  // 渲染筛选标签
+  // 渲染可折叠区域筛选
   filtersEl.innerHTML = '';
+  const filterWrap = document.createElement('div');
+  filterWrap.className = 'filter-collapse';
+
+  // 折叠头
+  const header = document.createElement('div');
+  header.className = 'filter-header';
+  header.innerHTML = '<span class="filter-header-label">📍 区域</span>' +
+    '<span class="filter-header-val">' + (poolFilterArea || '全部') + '</span>' +
+    '<span class="filter-arrow">▾</span>';
+  header.addEventListener('click', () => {
+    const body = filterWrap.querySelector('.filter-body');
+    const arrow = header.querySelector('.filter-arrow');
+    const isOpen = body.classList.toggle('open');
+    arrow.textContent = isOpen ? '▴' : '▾';
+  });
+
+  // 折叠体
+  const body = document.createElement('div');
+  body.className = 'filter-body';
   areas.forEach(a => {
     const chip = document.createElement('button');
     chip.className = 'filter-chip' + (poolFilterArea === a ? ' active' : '');
@@ -707,8 +726,12 @@ function renderLocationPool() {
       poolFilterArea = poolFilterArea === a ? '' : a;
       renderLocationPool();
     });
-    filtersEl.appendChild(chip);
+    body.appendChild(chip);
   });
+
+  filterWrap.appendChild(header);
+  filterWrap.appendChild(body);
+  filtersEl.appendChild(filterWrap);
 
   // 筛选
   let filtered = locationPool;
